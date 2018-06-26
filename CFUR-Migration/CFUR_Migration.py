@@ -17,7 +17,7 @@
 #  C:\>python CFUR-Migration.py hostname/IP username password CFUR-CSS
 #
 # Comment out print lines for large clusters
-# Use this to monitor status- run sql select count(*) from numplan where cfurdestination = ''
+# Use this to monitor status from Publisher CLI- run sql select count(*) from devicenumplanmap dnpm left join device d on dnpm.fkdevice=d.pkid left join numplan np on dnpm.fknumplan=np.pkid where (d.tkclass = '1' or d.tkclass = '10'  or d.tkclass='252' or d.tkclass='254') and cfurdestination=''
 
 
 import sys
