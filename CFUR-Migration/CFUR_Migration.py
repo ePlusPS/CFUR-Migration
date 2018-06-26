@@ -15,6 +15,9 @@
 #
 # Then run the program CFUR-Migration.py
 #  C:\>python CFUR-Migration.py hostname/IP username password CFUR-CSS
+#
+# Comment out print lines for large clusters
+# Use this to monitor status- run sql select count(*) from numplan where cfurdestination = ''
 
 
 import sys
@@ -56,32 +59,32 @@ def main(argv):
        #Set CFUR External to not go to voicemail
        payload1 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurvoicemailenabled = \'f\' where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req1 = s.post('https://' + hostname + ':8443/axl/', verify=False, auth=HTTPBasicAuth(username,password),headers=headers, data=payload1)
-       print('CFUR External Voicemail Response for ' + pkid.get_text() + ': ' + req1.text)
+       #print('CFUR External Voicemail Response for ' + pkid.get_text() + ': ' + req1.text)
 
        #Set CFUR Internal to not go to voicemail
        payload2 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurintvoicemailenabled = \'f\' where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req2 = s.post('https://' + hostname + ':8443/axl/', verify=False, headers=headers, data=payload2)
-       print('\nCFUR Internal Voicemail Response: for ' + pkid.get_text() + ': ' + req2.text)
+       #print('\nCFUR Internal Voicemail Response: for ' + pkid.get_text() + ': ' + req2.text)
 
        #Set CFUR External Number
        payload3 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurdestination=dnorpattern where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req3 = s.post('https://' + hostname + ':8443/axl/', verify=False, headers=headers, data=payload3)
-       print('\nCFUR External Extension Response: for ' + pkid.get_text() + ': ' + req3.text)
+       #print('\nCFUR External Extension Response: for ' + pkid.get_text() + ': ' + req3.text)
 
        #Set CFUR Internal Number
        payload4 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurintdestination=dnorpattern where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req4 = s.post('https://' + hostname + ':8443/axl/', verify=False, headers=headers, data=payload4)
-       print('\nCFUR Internal Extension Response: for ' + pkid.get_text() + ': ' + req4.text)
+       #print('\nCFUR Internal Extension Response: for ' + pkid.get_text() + ': ' + req4.text)
 
        #Set CFUR External CSS Number
        payload5 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set fkcallingsearchspace_cfur= (select pkid from callingsearchspace where name=\'' + cfur_css + '\') where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req5 = s.post('https://' + hostname + ':8443/axl/', verify=False, headers=headers, data=payload5)
-       print('\nCFUR External CSS Response: for ' + pkid.get_text() + ': ' + req5.text)
+       #print('\nCFUR External CSS Response: for ' + pkid.get_text() + ': ' + req5.text)
 
        #Set CFUR Internal CSS Number
        payload6 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set fkcallingsearchspace_cfurint= (select pkid from callingsearchspace where name=\'' + cfur_css + '\') where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req6 = s.post('https://' + hostname + ':8443/axl/', verify=False, headers=headers, data=payload6)
-       print('\nCFUR Internal CSS Response: for ' + pkid.get_text() + ': ' + req6.text)
+       #print('\nCFUR Internal CSS Response: for ' + pkid.get_text() + ': ' + req6.text)
 
 if __name__ == "__main__":
    #Replace the below values or pass the commands through the command-line and remove the below line
