@@ -53,7 +53,7 @@ def main(argv):
    #Create a new session to maintain cookies across requests      
    s = requests.Session()
    
-   headers= {"SOAPAction": "\"CUCM:DB ver=10.5 getPhone\"", "Content-Type": "text/xml"}
+   headers= {"SOAPAction": "\"CUCM:DB ver=10.5 executeSQLQuery\"", "Content-Type": "text/xml"}
 
    #Set filter for devices such as fkdevicepool = '0bf8ade8-e1c8-c875-ff99-2c8ecdde1b05'
    filter= 'where d.tkclass = \'1\' or d.tkclass = \'10\'  or d.tkclass=\'252\''
@@ -66,6 +66,7 @@ def main(argv):
    print(len(pkidlist) + ' items found to be updated.')
 
    for pkid in pkidlist:
+       headers= {"SOAPAction": "\"CUCM:DB ver=10.5 executeSQLUpdate\"", "Content-Type": "text/xml"}
        #Set CFUR External to not go to voicemail
        payload1 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurvoicemailenabled = \'f\' where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
        req1 = s.post('https://' + hostname + ':8443/axl/', verify=False, auth=HTTPBasicAuth(username,password),headers=headers, data=payload1)
@@ -106,6 +107,7 @@ def main(argv):
        pkidlist = soup.find_all('pkid')
 
        for pkid in pkidlist:
+           headers= {"SOAPAction": "\"CUCM:DB ver=10.5 executeSQLUpdate\"", "Content-Type": "text/xml"}
            #Set CFUR External to not go to voicemail
            payload1 = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLUpdate><sql>update numplan set cfurvoicemailenabled = \'f\' where pkid=\'' + pkid.get_text() + '\'</sql></ns:executeSQLUpdate></SOAP-ENV:Envelope>'
            req1 = s.post('https://' + hostname + ':8443/axl/', verify=False, auth=HTTPBasicAuth(username,password),headers=headers, data=payload1)
