@@ -63,7 +63,6 @@ def main(argv):
    numplanxml = s.post('https://' + hostname + ':8443/axl/', verify=False, auth=HTTPBasicAuth(username,password),headers=headers, data=numplanquery)
    soup = BeautifulSoup(numplanxml.text)
    pkidlist = soup.find_all('pkid')
-   print(len(pkidlist) + ' items found to be updated.')
 
    for pkid in pkidlist:
        headers= {"SOAPAction": "\"CUCM:DB ver=10.5 executeSQLUpdate\"", "Content-Type": "text/xml"}
