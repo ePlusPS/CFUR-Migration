@@ -100,6 +100,7 @@ def main(argv):
    deviceprofiles = ['username1' , 'username2']
 
    for deviceprofile in deviceprofiles:
+       headers= {"SOAPAction": "\"CUCM:DB ver=10.5 executeSQLQuery\"", "Content-Type": "text/xml"}
        numplanquery = '<soapenv:Envelope xmlns:soapenv=\"http://schemas.xmlsoap.org/soap/envelope/\" xmlns:ns=\"http://www.cisco.com/AXL/API/10.5\"><soapenv:Body><ns:executeSQLQuery><sql>select np.pkid from devicenumplanmap dnpm left join device d on dnpm.fkdevice=d.pkid left join numplan np on dnpm.fknumplan=np.pkid where d.name=\''+deviceprofile+'\'</sql></ns:executeSQLQuery></SOAP-ENV:Envelope>'
        numplanxml = s.post('https://' + hostname + ':8443/axl/', verify=False, auth=HTTPBasicAuth(username,password),headers=headers, data=numplanquery)
        soup = BeautifulSoup(numplanxml.text)
